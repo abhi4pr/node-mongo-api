@@ -3,7 +3,6 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 
 const app = express();
-
 const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -28,8 +27,8 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to my application." });
 });
 
-const userRoutes = require('./routes/users.routes.js');
-app.use('/api/users', userRoutes);
+const MainRoutes = require('./routes/Main.routes.js');
+app.use('/api', MainRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
