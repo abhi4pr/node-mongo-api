@@ -93,4 +93,27 @@ exports.getPassword = (req, res) => {
           });
         }
     });    
+};
+
+exports.updateUser = (req, res) => {
+    if(!req.body) {
+        return res.status(400).send({
+            message: "Please fill all required field"
+        });
+    }
+
+    Customertbl.findByIdAndUpdate(req.params.id, {
+        name: req.body.name, 
+        password: req.body.password,
+        address: req.body.address,
+        number: req.body.number
+    }, {new: true})
+    
+    .then(data => {
+      res.send(data);
+    }).catch(err => {
+      res.status(500).send({
+        message: err.message || "ID not found"
+      });
+    });
 };  

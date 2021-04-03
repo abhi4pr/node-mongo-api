@@ -85,7 +85,7 @@ exports.singlePro = (req, res) => {
     });    
 };        
 
-exports.deleltePro = (req, res) => {
+exports.deletePro = (req, res) => {
     Producttbl.findByIdAndDelete(req.params.id)
     .then(data => {
         res.send({message: "Deleted successfully!"});

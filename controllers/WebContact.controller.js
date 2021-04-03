@@ -1,5 +1,7 @@
 const Cformtable = require("../models/Cformtable.model.js");
 const Producttbl = require("../models/Producttbl.model.js");
+const Ratingtbl = require("../models/Ratingtbl.model.js");
+const Carttbl = require("../models/Carttbl.model.js");
 
 exports.create = (req, res) => {
     if(!req.body.cemail || !req.body.cnumber) {
@@ -30,4 +32,96 @@ exports.findPro = (req, res) => {
     Producttbl.find({pname:regex}).then(data => {
         res.send(data);        
     });
+};
+
+exports.giveRating = (req, res) => {
+    if(!req.body.email) {
+        return res.status(400).send({
+            message: "Please fill all required field"
+        });
+    }
+
+    const revar = new Ratingtbl({
+        pid: req.body.pid, 
+        email: req.body.email,
+        rating: req.body.rating,
+        review: req.body.review
+    });
+
+    revar.save()
+    .then(data => {
+        res.send(data);
+    }).catch(err => {
+        res.status(500).send({
+            message: err.message || "Something went wrong."
+        });
+    });
+};
+
+exports.getRating = (req, res) => {
+    Ratingtbl.find({pid:req.params.id})
+    .then(data => {
+        res.send(data);
+    }).catch(err => {
+        res.status(500).send({
+            message: err.message || "ID not found"
+        }); 
+    });
+};
+
+exports.addToCart = (req, res) => {
+    if(!req.body.pid || !req.body.pname || !req.body.pprice || !req.body.email) {
+        return res.status(400).send({
+            message: "Please fill all required field"
+        });
+    }
+
+    Carttbl.findOne({ pid: req.body.pid, email: req.body.email }).then(checkvar => {
+        if(checkvar) {
+          return res.status(400).send({
+           message: "Product is allready in the cart"
+          });       
+        } else {
+            const cvar = new Carttbl({
+                pid: req.body.pid, 
+                pname: req.body.pname,
+                pprice: req.body.pprice,
+                ppic: req.body.ppic,
+                qty: 1,
+                total_price: req.body.total_price,
+                email: req.body.email
+            });
+
+          cvar.save()
+          .then(data => {
+             res.send(data);
+          }).catch(err => {
+            res.status(500).send({
+                message: err.message || "Something went wrong."
+          });
+        });
+      }
+    });        
+};
+
+exports.deleteScart = (req, res) => {
+    Carttbl.findByIdAndDelete(req.params.id)
+    .then(data => {
+        res.send({message: "Item removed successfully!"});
+    }).catch(err => {
+      res.status(400).send({
+        message: "No item found with = " +req.params.id
+      });
+    });    
+}; 
+
+exports.countCart = (req, res) => {
+    Carttbl.find().count()
+    .then(data => {
+        res.send(data);
+    }).catch(err => {
+      res.status(400).send({
+        message: "Something is not right"
+      });
+    });    
 };
