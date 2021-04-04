@@ -11,6 +11,7 @@ const router = express.Router();
   router.post("/addcart", WebContactController.addToCart);
   router.get("/removecart/:id", WebContactController.deleteScart);
   router.get("/countcart", WebContactController.countCart);
+  router.put("/updtcart", WebContactController.updtCart);  
   
   router.post("/cadd", CustomerController.create);
   router.post("/clogin", CustomerController.check);

@@ -116,12 +116,34 @@ exports.deleteScart = (req, res) => {
 }; 
 
 exports.countCart = (req, res) => {
-    Carttbl.find().count()
+    Carttbl.find().countDocuments()
     .then(data => {
-        res.send(data);
+        res.send(data+'');
     }).catch(err => {
-      res.status(400).send({
-        message: "Something is not right"
+      res.status(500).send({
+        message: err.message || "Something is not right"
       });
     });    
 };
+
+exports.updtCart = (req, res) => {
+   if(!req.body.qty || !req.body.pprice) {
+        return res.status(400).send({
+            message: "Please fill all required field"
+        });
+    }
+
+    Carttbl.findByIdAndUpdate(req.body.id,{
+        qty: req.body.qty, 
+        pprice: req.body.pprice,
+        total_price: req.body.qty*req.body.pprice
+    }, {new: true})
+    
+    .then(data => {
+      res.send(data);
+    }).catch(err => {
+      res.status(500).send({
+        message: err.message || "Error while updating cart"
+      });
+    });
+};    
