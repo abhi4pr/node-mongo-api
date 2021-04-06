@@ -12,7 +12,7 @@ const dbConfig = require("./config/db.config.js");
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
-mongoose.connect(dbConfig.url, {
+const db = mongoose.connect(dbConfig.url, {
 	useNewUrlParser : true,
 	useUnifiedTopology : true
 }).then(()=> {

@@ -9,10 +9,12 @@ const router = express.Router();
   router.post("/addreview", WebContactController.giveRating);
   router.get("/getreview/:id", WebContactController.getRating);
   router.post("/addcart", WebContactController.addToCart);
+  router.get("/cartbyid/:email", WebContactController.getCartById);
   router.get("/removecart/:id", WebContactController.deleteScart);
   router.get("/countcart", WebContactController.countCart);
   router.put("/updtcart", WebContactController.updtCart);  
-  
+  router.get("/getcheck/:email", WebContactController.iniOrder);
+
   router.post("/cadd", CustomerController.create);
   router.post("/clogin", CustomerController.check);
   router.post("/getpass", CustomerController.getPassword);

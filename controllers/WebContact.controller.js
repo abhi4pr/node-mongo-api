@@ -104,6 +104,17 @@ exports.addToCart = (req, res) => {
     });        
 };
 
+exports.getCartById = (req, res) => {
+    Carttbl.find({email:req.params.email})    
+    .then(data => {
+      res.send(data);
+    }).catch(err => {
+      res.status(500).send({
+        message: err.message || "Error while updating cart"
+      });
+    });
+};
+
 exports.deleteScart = (req, res) => {
     Carttbl.findByIdAndDelete(req.params.id)
     .then(data => {
@@ -146,4 +157,29 @@ exports.updtCart = (req, res) => {
         message: err.message || "Error while updating cart"
       });
     });
-};    
+};
+
+exports.iniOrder = (req,res) => {
+    Carttbl.aggregate([
+     { 
+      $match: 
+       { email: req.params.email } 
+     },
+     {
+      $lookup:
+       {
+         from: "customertbls",
+         localField: "email",
+         foreignField: "email",
+         as: "check_details"
+       }
+      }
+    ])
+    .then(data => {
+      res.send(data);
+    }).catch(err => {
+      res.status(500).send({
+        message: err.message || "something wrong while getting details"
+      });
+    });  
+};
