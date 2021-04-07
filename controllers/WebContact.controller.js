@@ -2,6 +2,8 @@ const Cformtable = require("../models/Cformtable.model.js");
 const Producttbl = require("../models/Producttbl.model.js");
 const Ratingtbl = require("../models/Ratingtbl.model.js");
 const Carttbl = require("../models/Carttbl.model.js");
+const Ordertbl = require("../models/Ordertbl.model.js");
+const Orderitemtbl = require("../models/Orderitemtbl.model.js");
 
 exports.create = (req, res) => {
     if(!req.body.cemail || !req.body.cnumber) {
@@ -182,4 +184,69 @@ exports.iniOrder = (req,res) => {
         message: err.message || "something wrong while getting details"
       });
     });  
+};
+
+exports.wAllProducts = (req, res) => {
+    Producttbl.find()
+    .then(data => {
+        res.send(data);
+    }).catch(err => {
+        res.status(500).send({
+            message: err.message || "Something went wrong while getting Product list."
+        });
+    });
+};
+
+exports.wSinglePro = (req, res) => {
+    Producttbl.findById(req.params.id)
+    .then(data => {
+        res.send(data);
+    }).catch(err => {
+      res.status(400).send({
+        message: "No product found with = " +req.params.id
+      });
+    });    
+};
+
+exports.codOrder = (req, res) => {
+    if(!req.body.grand_total || !req.body.number || !req.body.email) {
+        return res.status(400).send({
+            message: "Please fill all required field"
+        });
+    }
+
+      const odvar = new Ordertbl({
+        name: req.body.name, 
+        email: req.body.email,
+        address: req.body.address,
+        number: req.body.number,
+        pmode: 'Cash On Delivery',
+        grand_total: req.body.grand_total
+      });
+
+      odvar.save()
+      .then(function getLastId(){
+        Ordertbl.find({}).sort({_id:-1}).limit(1)
+        .then(data => {
+          const finalId = data[0]._id;
+
+          const odi = new Orderitemtbl({
+            order_id: finalId, 
+            product_id: req.body.product_id,
+            qty: req.body.qty,
+            price: req.body.price,
+            email: req.body.email,
+            pmode: 'Cash On Delivery',
+            grand_total: req.body.grand_total
+          });
+          odi.save()
+          .then(data => {
+              Carttbl.deleteMany({email:req.body.email})
+              .then(data => {
+                 res.send({message: "Order placed successfully!"});
+              })
+          });
+
+        })
+      });
 };

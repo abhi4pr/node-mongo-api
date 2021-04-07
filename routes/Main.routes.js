@@ -5,6 +5,8 @@ const AdminController = require('../controllers/Admin.controller.js');
 const router = express.Router();
 
   router.post("/", WebContactController.create);
+  router.get("/getprods", WebContactController.wAllProducts);
+  router.get("/getsprods/:id", WebContactController.wSinglePro);
   router.get("/search/:pname", WebContactController.findPro);
   router.post("/addreview", WebContactController.giveRating);
   router.get("/getreview/:id", WebContactController.getRating);
@@ -14,6 +16,7 @@ const router = express.Router();
   router.get("/countcart", WebContactController.countCart);
   router.put("/updtcart", WebContactController.updtCart);  
   router.get("/getcheck/:email", WebContactController.iniOrder);
+  router.post("/placeorder", WebContactController.codOrder);
 
   router.post("/cadd", CustomerController.create);
   router.post("/clogin", CustomerController.check);
