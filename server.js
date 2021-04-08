@@ -13,14 +13,14 @@ const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
 const db = mongoose.connect(dbConfig.url, {
-	useNewUrlParser : true,
-	useUnifiedTopology : true
+  useNewUrlParser : true,
+  useUnifiedTopology : true
 }).then(()=> {
-   		console.log('connected to database');
+      console.log('connected to database');
    })
   .catch(err => {
-  	console.log('couldnt connect to database',err);
-  	process.exit();
+    console.log('couldnt connect to database',err);
+    process.exit();
   });
 
 app.get("/", (req, res) => {

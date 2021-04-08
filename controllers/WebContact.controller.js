@@ -230,23 +230,29 @@ exports.codOrder = (req, res) => {
         .then(data => {
           const finalId = data[0]._id;
 
-          const odi = new Orderitemtbl({
-            order_id: finalId, 
-            product_id: req.body.product_id,
-            qty: req.body.qty,
-            price: req.body.price,
-            email: req.body.email,
-            pmode: 'Cash On Delivery',
-            grand_total: req.body.grand_total
-          });
-          odi.save()
-          .then(data => {
-              Carttbl.deleteMany({email:req.body.email})
-              .then(data => {
-                 res.send({message: "Order placed successfully!"});
-              })
-          });
+          Carttbl.find({ email:req.body.email })
+          .then(result => {
+            const newarr = result;
 
+             for (var key in newarr) {  
+              const odi = new Orderitemtbl({
+                order_id: finalId, 
+                product_id: newarr[key].pid,
+                qty: newarr[key].qty,
+                price: newarr[key].pprice,
+                email: req.body.email,
+                pmode: 'Cash On Delivery',
+                grand_total: req.body.grand_total
+              });
+            odi.save()
+            .then(data => {
+              Carttbl.deleteMany({email:req.body.email})
+               .then(data => {
+                 res.send({message: "Order placed successfully!"});
+               })
+            });
+           } 
+          })
         })
       });
 };
