@@ -22,6 +22,7 @@ const router = express.Router();
   router.post("/clogin", CustomerController.check);
   router.post("/getpass", CustomerController.getPassword);
   router.put("/upuser/:id", CustomerController.updateUser);
+  router.get("/usrorders/:email", CustomerController.custOrders);
 
   router.post("/alogin", AdminController.check);
   router.post("/padd", AdminController.pcreate);

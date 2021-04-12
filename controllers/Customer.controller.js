@@ -1,5 +1,8 @@
 const Customertbl = require("../models/Customertbl.model.js");
 const nodemailer = require('nodemailer');
+const Ordertbl = require("../models/Ordertbl.model.js");
+const Orderitemtbl = require("../models/Orderitemtbl.model.js");
+const Producttbl = require("../models/Producttbl.model.js");
 
 exports.create = (req, res) => {
     if(!req.body.email || !req.body.password) {
@@ -117,3 +120,18 @@ exports.updateUser = (req, res) => {
       });
     });
 };  
+
+exports.custOrders = (req,res) => {
+    Orderitemtbl.find({email:req.params.email})
+    .then(data => {
+      const newarr = data;
+      for (var key in newarr) {
+       const convertId = newarr[key].product_id;
+        Producttbl.find({_id:convertId}).select({ "pname": 1, "_id": 0})
+        .then(result => {
+          const finalres = newarr.concat(result);
+          res.send(finalres);
+        })
+      }  
+    });
+};
