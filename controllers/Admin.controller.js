@@ -184,6 +184,17 @@ exports.allArticles = (req, res) => {
     });
 };
 
+exports.singleArti = (req, res) => {
+    Articletbl.findById(req.params.id)
+    .then(data => {
+        res.send(data);
+    }).catch(err => {
+      res.status(400).send({
+        message: "No Article found with = " +req.params.id
+      });
+    });    
+};
+
 exports.deleteArti = (req, res) => {
     Articletbl.findByIdAndDelete(req.params.id)
     .then(data => {

@@ -35,6 +35,7 @@ const router = express.Router();
   router.get("/getcat", AdminController.allCat);
   router.post("/badd", AdminController.acreate);
   router.get("/getblo", AdminController.allArticles);
+  router.get("/getsblo/:id", AdminController.singleArti);
   router.delete("/dltsarti/:id", AdminController.deleteArti);
 
 module.exports = router;
