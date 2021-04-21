@@ -13,7 +13,7 @@ const router = express.Router();
   router.post("/addcart", WebContactController.addToCart);
   router.get("/cartbyid/:email", WebContactController.getCartById);
   router.get("/removecart/:id", WebContactController.deleteScart);
-  router.get("/countcart", WebContactController.countCart);
+  router.get("/countcart/:email", WebContactController.countCart);
   router.put("/updtcart", WebContactController.updtCart);  
   router.get("/getcheck/:email", WebContactController.iniOrder);
   router.post("/placeorder", WebContactController.codOrder);

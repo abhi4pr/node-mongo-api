@@ -129,7 +129,7 @@ exports.deleteScart = (req, res) => {
 }; 
 
 exports.countCart = (req, res) => {
-    Carttbl.find().countDocuments()
+    Carttbl.find({email:req.params.email}).countDocuments()
     .then(data => {
         res.send(data+'');
     }).catch(err => {
