@@ -131,7 +131,7 @@ exports.deleteScart = (req, res) => {
 exports.countCart = (req, res) => {
     Carttbl.find({email:req.params.email}).countDocuments()
     .then(data => {
-        res.send(data+'');
+      res.status(200).send([{well: data}]);
     }).catch(err => {
       res.status(500).send({
         message: err.message || "Something is not right"
