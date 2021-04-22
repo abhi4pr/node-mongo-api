@@ -146,7 +146,7 @@ exports.updtCart = (req, res) => {
         });
     }
 
-    Carttbl.findByIdAndUpdate(req.body.id,{
+    Carttbl.findByIdAndUpdate(req.params.id,{
         qty: req.body.qty, 
         pprice: req.body.pprice,
         total_price: req.body.qty*req.body.pprice
